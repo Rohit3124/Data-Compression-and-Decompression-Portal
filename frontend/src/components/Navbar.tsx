@@ -12,13 +12,13 @@ import { currentUserContext } from "@/context/userContext";
 import { LogOut, Menu, X, Zap } from "lucide-react";
 import { useContext, useState } from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export function Navbar() {
   const { currentUser } = useContext(currentUserContext);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeNavItem, setActiveNavItem] = useState("Home");
-  console.log(currentUser);
+  const location = useLocation();
+  const pathname = location.pathname;
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Compress", href: "/compress" },
@@ -48,13 +48,10 @@ export function Navbar() {
                 key={item.name}
                 to={item.href}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  item.name === activeNavItem
+                  pathname === item.href
                     ? "text-blue-600 bg-blue-50"
                     : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 }`}
-                onClick={() => {
-                  setActiveNavItem(item.name);
-                }}
               >
                 {item.name}
               </Link>
@@ -108,13 +105,12 @@ export function Navbar() {
                   key={item.name}
                   to={item.href}
                   className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    item.name === activeNavItem
+                    pathname === item.href
                       ? "text-blue-600 bg-blue-50"
                       : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    setActiveNavItem(item.name);
                   }}
                 >
                   {item.name}
