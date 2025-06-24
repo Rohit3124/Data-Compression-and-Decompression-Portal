@@ -1,12 +1,12 @@
 import { Navbar } from "@/components/Navbar";
 
-const Home = () => {
+const Compress = () => {
   return (
     <div>
       <Navbar />
-      Home
+      Compress
     </div>
   );
 };
 
-export default Home;
+export default Compress;

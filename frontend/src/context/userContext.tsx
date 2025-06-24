@@ -1,9 +1,13 @@
 import React, { createContext, useState, useEffect } from "react";
 import type { ReactNode, Dispatch, SetStateAction } from "react";
 
+interface IUser {
+  username: string;
+  email: string;
+}
 interface UserContextType {
-  currentUser: string | null;
-  setCurrentUser: Dispatch<SetStateAction<string | null>>;
+  currentUser: IUser | null;
+  setCurrentUser: Dispatch<SetStateAction<IUser | null>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
@@ -20,7 +24,7 @@ interface UserContextProps {
 }
 
 export const UserContext: React.FC<UserContextProps> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<string | null>(() => {
+  const [currentUser, setCurrentUser] = useState<IUser | null>(() => {
     const savedUser = localStorage.getItem("currentUser");
     return savedUser ? JSON.parse(savedUser) : null;
   });
