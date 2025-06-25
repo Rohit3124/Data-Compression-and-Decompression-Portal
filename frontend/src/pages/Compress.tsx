@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,11 +25,98 @@ import { Navbar } from "@/components/Navbar";
 import CompressionChart from "@/components/CompressionChart";
 
 export default function Compress() {
+  const algorithms = [
+    {
+      id: "rle",
+      name: "Run-Length Encoding (RLE)",
+      description:
+        "A simple lossless compression algorithm that replaces sequences of identical data with a count and the data value.",
+      complexity: "Low",
+      efficiency: "Medium",
+      bestFor: [
+        "Images with solid colors",
+        "Simple graphics",
+        "Binary data with repetition",
+      ],
+      howItWorks:
+        "Scans data sequentially and replaces runs of identical bytes with a count-value pair. For example, 'AAABBB' becomes '3A3B'.",
+      advantages: [
+        "Simple to implement",
+        "Fast compression/decompression",
+        "Good for specific data types",
+      ],
+      disadvantages: [
+        "Poor performance on random data",
+        "Can increase file size if no repetition exists",
+      ],
+      useCase:
+        "Ideal for bitmap images, fax transmissions, and data with long runs of identical values.",
+    },
+    {
+      id: "huffman",
+      name: "Huffman Coding",
+      description:
+        "An optimal prefix-free coding algorithm that assigns variable-length codes to characters based on their frequency.",
+      complexity: "Medium",
+      efficiency: "High",
+      bestFor: [
+        "Text files",
+        "General purpose compression",
+        "Data with uneven symbol distribution",
+      ],
+      howItWorks:
+        "Builds a binary tree based on character frequencies, assigning shorter codes to more frequent characters. Creates a prefix-free code system.",
+      advantages: [
+        "Optimal for known symbol probabilities",
+        "No information loss",
+        "Widely applicable",
+      ],
+      disadvantages: [
+        "Requires two passes through data",
+        "Tree overhead",
+        "Not adaptive",
+      ],
+      useCase:
+        "Foundation for many compression formats like JPEG, PNG, and ZIP. Excellent for text and general data compression.",
+    },
+    {
+      id: "lz77",
+      name: "LZ77 (Lempel-Ziv 1977)",
+      description:
+        "A dictionary-based compression algorithm that replaces repeated sequences with references to previous occurrences.",
+      complexity: "High",
+      efficiency: "Very High",
+      bestFor: ["Text files", "Source code", "Data with repetitive patterns"],
+      howItWorks:
+        "Uses a sliding window to find matches between current data and previously seen data, replacing matches with distance-length pairs.",
+      advantages: [
+        "Excellent compression ratios",
+        "Adaptive algorithm",
+        "No prior knowledge needed",
+      ],
+      disadvantages: [
+        "Computationally intensive",
+        "Complex implementation",
+        "Memory intensive",
+      ],
+      useCase:
+        "Basis for popular formats like DEFLATE (used in ZIP, PNG, HTTP compression). Excellent for text and structured data.",
+    },
+  ];
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [algorithm, setAlgorithm] = useState("");
   const [operation, setOperation] = useState("compress");
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [compressionStats, setCompressionStats] = useState<{
+    originalSize: number;
+    outputSize: number;
+    ratio: number;
+    timeMs: number;
+  } | null>(null);
+
+  const selectedAlgorithm = algorithms.find((a) => a.id === algorithm);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -35,6 +124,7 @@ export default function Compress() {
       setSelectedFile(file);
     }
   };
+
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
   };
@@ -46,12 +136,6 @@ export default function Compress() {
       setSelectedFile(file);
     }
   };
-  const [compressionStats, setCompressionStats] = useState<{
-    originalSize: number;
-    outputSize: number;
-    ratio: number;
-    timeMs: number;
-  } | null>(null);
 
   const handleProcess = async () => {
     if (!selectedFile || !algorithm) return;
@@ -86,7 +170,6 @@ export default function Compress() {
 
       if (!response.ok) throw new Error("Failed to process file");
 
-      // ✅ Read stats from headers
       const originalSize = Number(response.headers.get("X-Original-Size"));
       const outputSize = Number(response.headers.get("X-Output-Size"));
       const timeMs = Number(response.headers.get("X-Processing-Time"));
@@ -100,7 +183,6 @@ export default function Compress() {
       });
 
       const blob = await response.blob();
-
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       const suffix = operation === "compress" ? "_compressed" : "_decompressed";
@@ -142,10 +224,11 @@ export default function Compress() {
             </CardTitle>
             <CardDescription>
               Upload any file and compress or decompress it using various
-              algorithms
+              algorithms.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* File upload */}
             <div className="space-y-2">
               <Label htmlFor="file-upload">File Upload</Label>
               <div
@@ -177,6 +260,7 @@ export default function Compress() {
               </div>
             </div>
 
+            {/* Algorithm selection */}
             <div className="space-y-2">
               <Label htmlFor="algorithm">Compression Algorithm</Label>
               <Select value={algorithm} onValueChange={setAlgorithm}>
@@ -184,13 +268,69 @@ export default function Compress() {
                   <SelectValue placeholder="Select compression algorithm" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="huffman">Huffman Coding</SelectItem>
-                  <SelectItem value="rle">Run-Length Encoding (RLE)</SelectItem>
-                  <SelectItem value="lz77">LZ77</SelectItem>
+                  {algorithms.map((algo) => (
+                    <SelectItem key={algo.id} value={algo.id}>
+                      {algo.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+
+              {selectedAlgorithm && (
+                <Card className="bg-gray-50 mt-3">
+                  <CardHeader>
+                    <CardTitle>{selectedAlgorithm.name}</CardTitle>
+                    <CardDescription>
+                      {selectedAlgorithm.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-2 text-sm text-gray-700">
+                    <p>
+                      <strong>Complexity:</strong>{" "}
+                      {selectedAlgorithm.complexity}
+                    </p>
+                    <p>
+                      <strong>Efficiency:</strong>{" "}
+                      {selectedAlgorithm.efficiency}
+                    </p>
+                    <p>
+                      <strong>How it works:</strong>{" "}
+                      {selectedAlgorithm.howItWorks}
+                    </p>
+                    <div>
+                      <strong>Best for:</strong>
+                      <ul className="list-disc list-inside ml-4">
+                        {selectedAlgorithm.bestFor.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <strong>Advantages:</strong>
+                      <ul className="list-disc list-inside ml-4">
+                        {selectedAlgorithm.advantages.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <strong>Disadvantages:</strong>
+                      <ul className="list-disc list-inside ml-4">
+                        {selectedAlgorithm.disadvantages.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <p>
+                      <strong>Typical use case:</strong>{" "}
+                      {selectedAlgorithm.useCase}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
+            {/* Operation */}
             <div className="space-y-2">
               <Label>Operation</Label>
               <RadioGroup
@@ -213,17 +353,19 @@ export default function Compress() {
               </RadioGroup>
             </div>
 
+            {/* Progress */}
             {isProcessing && (
               <div className="space-y-2">
                 <Label>Processing...</Label>
                 <Progress value={progress} className="w-full" />
                 <p className="text-sm text-gray-500 text-center">
                   {operation === "compress" ? "Compressing" : "Decompressing"}{" "}
-                  file using {algorithm}... {progress}%
+                  file using {selectedAlgorithm?.name}... {progress}%
                 </p>
               </div>
             )}
 
+            {/* Actions */}
             <div className="flex gap-3 pt-4">
               <Button
                 onClick={handleProcess}
@@ -233,7 +375,6 @@ export default function Compress() {
                 <FileText className="h-4 w-4 mr-2" />
                 {operation === "compress" ? "Compress File" : "Decompress File"}
               </Button>
-
               <Button
                 variant="outline"
                 disabled={!selectedFile || isProcessing}
@@ -244,6 +385,7 @@ export default function Compress() {
               </Button>
             </div>
 
+            {/* Selected file info */}
             {selectedFile && (
               <Card className="bg-gray-50">
                 <CardContent className="pt-4">
@@ -265,7 +407,7 @@ export default function Compress() {
                     <div>
                       <Label className="text-xs text-gray-500">Algorithm</Label>
                       <p className="font-medium">
-                        {algorithm || "Not selected"}
+                        {selectedAlgorithm?.name || "Not selected"}
                       </p>
                     </div>
                     <div>
@@ -278,9 +420,11 @@ export default function Compress() {
             )}
           </CardContent>
         </Card>
+
+        {/* Stats & chart */}
         {compressionStats && (
           <>
-            <Card className="bg-gray-50">
+            <Card className="bg-gray-50 mt-4">
               <CardHeader>
                 <CardTitle>Compression Statistics</CardTitle>
               </CardHeader>
