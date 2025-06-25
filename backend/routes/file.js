@@ -51,9 +51,6 @@ router.post("/process", upload.single("file"), async (req, res) => {
     const outputSize = fs.statSync(outputFilePath).size;
     const ratio = originalSize === 0 ? 0 : outputSize / originalSize;
 
-    // Send stats + file as one ZIP-like stream? No.
-    // Instead: send stats in header & file as body
-
     res.set({
       "X-Original-Size": originalSize,
       "X-Output-Size": outputSize,
