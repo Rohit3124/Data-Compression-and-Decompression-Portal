@@ -170,17 +170,34 @@ export default function Compress() {
 
       if (!response.ok) throw new Error("Failed to process file");
 
-      const originalSize = Number(response.headers.get("X-Original-Size"));
-      const outputSize = Number(response.headers.get("X-Output-Size"));
-      const timeMs = Number(response.headers.get("X-Processing-Time"));
+      const originalSizeHeader = response.headers.get("X-Original-Size");
+      const outputSizeHeader = response.headers.get("X-Output-Size");
+      const timeMsHeader = response.headers.get("X-Processing-Time");
+
+      console.log("HEADERS RECEIVED", {
+        originalSize: response.headers.get("X-Original-Size"),
+        outputSize: response.headers.get("X-Output-Size"),
+        timeMs: response.headers.get("X-Processing-Time"),
+      });
+
+      if (!originalSizeHeader || !outputSizeHeader || !timeMsHeader) {
+        throw new Error("Missing compression stats in response headers");
+      }
+
+      const originalSize = parseInt(originalSizeHeader, 10);
+      const outputSize = parseInt(outputSizeHeader, 10);
+      const timeMs = parseInt(timeMsHeader, 10);
+
       const ratio = originalSize === 0 ? 0 : outputSize / originalSize;
-      console.log(originalSize, outputSize, timeMs, ratio);
+
       setCompressionStats({
         originalSize,
         outputSize,
         ratio,
         timeMs,
       });
+
+      console.log(originalSize, outputSize, timeMs, ratio);
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
