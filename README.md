@@ -107,7 +107,16 @@ The server should start and display:
 Connected to MongoDB...
 Listening on port 3000...
 
-<pre> <code> ```text Project Structure |--routes/ | |--user.route.js | |--auth.route.js | |--test.route.js | |--question.route.js | |--result.route.js |--index.js |--package.json |--.env ``` </code> </pre>
+Project Structure
+|--routes/
+| |--user.route.js
+| |--auth.route.js
+| |--test.route.js
+| |--question.route.js
+| |--result.route.js
+|--index.js
+|--package.json
+|--.env
 
 Basic API Endpoints
 • POST /api/user/signup -Register a new user
@@ -118,3 +127,6 @@ Notes
 • Ensure the .env file is correctly set up before running the application.
 • Modify PORT in .env if needed.
 • If facing MongoDB connection issues, verify MONGODB_URL is correctly set.
+
+Deployed demo link
+https://data-compression-and-decompression-sigma.vercel.app/
