@@ -63,9 +63,9 @@ By supporting multiple algorithms and showing comparative results, the system pr
 - Multer (for file uploads)
 - fs module (for server-side file operations)
 
-## ⚙️ Setup Guide (Run Locally)
+## Setup Guide (Run Locally)
 
-### 🔧 Prerequisites
+### Prerequisites
 
 Make sure the following are installed:
 
@@ -75,7 +75,7 @@ Make sure the following are installed:
 
 ---
 
-### 🧩 Installation Steps
+### Installation Steps
 
 1. Clone the Repository
    git clone https://github.com/Rohit3124/Data-Compression-and-Decompression-Portal.git
@@ -107,16 +107,7 @@ The server should start and display:
 Connected to MongoDB...
 Listening on port 3000...
 
-Project Structure
-|--routes/
-| |--user.route.js
-| |--auth.route.js
-| |--test.route.js
-| |--question.route.js
-| |--result.route.js
-|--index.js
-|--package.json
-|--.env
+<pre> <code> ```text Project Structure |--routes/ | |--user.route.js | |--auth.route.js | |--test.route.js | |--question.route.js | |--result.route.js |--index.js |--package.json |--.env ``` </code> </pre>
 
 Basic API Endpoints
 • POST /api/user/signup -Register a new user
