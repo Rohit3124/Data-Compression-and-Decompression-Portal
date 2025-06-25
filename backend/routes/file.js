@@ -25,6 +25,8 @@ router.post("/process", upload.single("file"), async (req, res) => {
   const inputFilePath = uploadedFile.path;
   const outputFilePath = `${uploadedFile.path}_output`;
 
+  const startTime = Date.now();
+
   try {
     if (algorithm === "huffman") {
       operation === "compress"
@@ -42,6 +44,22 @@ router.post("/process", upload.single("file"), async (req, res) => {
       throw new Error("Invalid algorithm");
     }
 
+    const endTime = Date.now();
+    const processingTimeMs = endTime - startTime;
+
+    const originalSize = fs.statSync(inputFilePath).size;
+    const outputSize = fs.statSync(outputFilePath).size;
+    const ratio = originalSize === 0 ? 0 : outputSize / originalSize;
+
+    // Send stats + file as one ZIP-like stream? No.
+    // Instead: send stats in header & file as body
+
+    res.set({
+      "X-Original-Size": originalSize,
+      "X-Output-Size": outputSize,
+      "X-Processing-Time": processingTimeMs,
+    });
+
     res.download(outputFilePath, (err) => {
       fs.unlinkSync(inputFilePath);
       fs.unlinkSync(outputFilePath);
@@ -51,5 +69,4 @@ router.post("/process", upload.single("file"), async (req, res) => {
     res.status(500).send("Error processing file");
   }
 });
-
 module.exports = router;

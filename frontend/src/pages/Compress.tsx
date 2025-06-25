@@ -20,6 +20,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { Upload, FileText, Download, Zap } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import CompressionChart from "@/components/CompressionChart";
 
 export default function Compress() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -45,12 +46,19 @@ export default function Compress() {
       setSelectedFile(file);
     }
   };
+  const [compressionStats, setCompressionStats] = useState<{
+    originalSize: number;
+    outputSize: number;
+    ratio: number;
+    timeMs: number;
+  } | null>(null);
 
   const handleProcess = async () => {
     if (!selectedFile || !algorithm) return;
 
     setIsProcessing(true);
     setProgress(0);
+    setCompressionStats(null);
 
     const formData = new FormData();
     formData.append("file", selectedFile);
@@ -76,9 +84,20 @@ export default function Compress() {
       clearInterval(interval);
       setProgress(100);
 
-      if (!response.ok) {
-        throw new Error("Failed to process file");
-      }
+      if (!response.ok) throw new Error("Failed to process file");
+
+      // ✅ Read stats from headers
+      const originalSize = Number(response.headers.get("X-Original-Size"));
+      const outputSize = Number(response.headers.get("X-Output-Size"));
+      const timeMs = Number(response.headers.get("X-Processing-Time"));
+      const ratio = originalSize === 0 ? 0 : outputSize / originalSize;
+
+      setCompressionStats({
+        originalSize,
+        outputSize,
+        ratio,
+        timeMs,
+      });
 
       const blob = await response.blob();
 
@@ -259,6 +278,55 @@ export default function Compress() {
             )}
           </CardContent>
         </Card>
+        {compressionStats && (
+          <>
+            <Card className="bg-gray-50">
+              <CardHeader>
+                <CardTitle>Compression Statistics</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <Label className="text-xs text-gray-500">Original Size</Label>
+                  <p className="font-medium">
+                    {formatFileSize(compressionStats.originalSize)}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-xs text-gray-500">Output Size</Label>
+                  <p className="font-medium">
+                    {formatFileSize(compressionStats.outputSize)}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-xs text-gray-500">
+                    Compression Ratio
+                  </Label>
+                  <p className="font-medium">
+                    {compressionStats.ratio.toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-xs text-gray-500">
+                    Processing Time
+                  </Label>
+                  <p className="font-medium">{compressionStats.timeMs} ms</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="mt-4 bg-white">
+              <CardHeader>
+                <CardTitle>Visualization</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CompressionChart
+                  originalSize={compressionStats.originalSize}
+                  outputSize={compressionStats.outputSize}
+                />
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
     </>
   );
