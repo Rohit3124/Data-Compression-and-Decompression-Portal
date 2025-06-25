@@ -174,7 +174,7 @@ export default function Compress() {
       const outputSize = Number(response.headers.get("X-Output-Size"));
       const timeMs = Number(response.headers.get("X-Processing-Time"));
       const ratio = originalSize === 0 ? 0 : outputSize / originalSize;
-
+      console.log(originalSize, outputSize, timeMs, ratio);
       setCompressionStats({
         originalSize,
         outputSize,
@@ -201,7 +201,7 @@ export default function Compress() {
       setProgress(0);
     }
   };
-
+  console.log(compressionStats);
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
