@@ -77,56 +77,56 @@ Make sure the following are installed:
 
 ### Installation Steps
 
-1. Clone the Repository
-   git clone https://github.com/Rohit3124/Data-Compression-and-Decompression-Portal.git
-   cd Data-Compression-and-Decompression-Portal
+**1. Clone the Repository**
+-git clone https://github.com/Rohit3124/-Data-Compression-and-Decompression-Portal.git
+-cd Data-Compression-and-Decompression-Portal
 
-2. Install Dependencie
-   cd backend
-   npm install
-   cd ../frontend
-   npm install
+**2. Install Dependencie**
+-cd backend
+-npm install
+-cd ../frontend
+-npm install
 
-3. Setup Environment Variables
-   Create a .env file in the root directory and add the following environment variables:
-   PORT=3000
-   MONGODB_URL=<your_mongodb_connection_string>
-   JWT_SECRET_KEY=<your_secret_key>
+**3. Setup Environment Variables**
+-Create a .env file in the root directory and add the following -environment variables:
+-PORT=3000
+-MONGODB_URL=<your_mongodb_connection_string>
+-JWT_SECRET_KEY=<your_secret_key>
 
-4. Run the Frontend
-   From the root directory try running
-   cd frontend
-   npm run dev
+**4. Run the Frontend**
+-From the root directory try running
+-cd frontend
+-npm run dev
 
-5. Run the Backend
-   From the root directory try running
-   cd backend
-   nodemon index.js
+**5. Run the Backend**
+-From the root directory try running
+-cd backend
+-nodemon index.js
 
-The server should start and display:
-Connected to MongoDB...
-Listening on port 3000...
+-The server should start and display:
+-Connected to MongoDB...
+-Listening on port 3000...
 
-Project Structure
-|--routes/
-| |--user.route.js
-| |--auth.route.js
-| |--test.route.js
-| |--question.route.js
-| |--result.route.js
-|--index.js
-|--package.json
-|--.env
+**Project Structure**
+-|--routes/
+-| |--user.route.js
+-| |--auth.route.js
+-| |--test.route.js
+-| |--question.route.js
+-| |--result.route.js
+-|--index.js
+-|--package.json
+-|--.env
 
-Basic API Endpoints
-• POST /api/user/signup -Register a new user
-• POST /api/auth/signin -Login user
-• POST /api/file/process -To compress/decompress file
+**Basic API Endpoints**
+-POST /api/user/signup -Register a new user
+-POST /api/auth/signin -Login user
+-POST /api/file/process -To compress/decompress file
 
-Notes
-• Ensure the .env file is correctly set up before running the application.
-• Modify PORT in .env if needed.
-• If facing MongoDB connection issues, verify MONGODB_URL is correctly set.
+**Notes**
 
-Deployed demo link
-https://data-compression-and-decompression-sigma.vercel.app/
+- Ensure the .env file is correctly set up before running the application.
+- Modify PORT in .env if needed.
+- If facing MongoDB connection issues, verify MONGODB_URL is correctly set.
+
+**Deployed demo link** https://data-compression-and-decompression-sigma.vercel.app/
