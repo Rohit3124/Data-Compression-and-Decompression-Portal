@@ -23,7 +23,7 @@ import { Progress } from "@/components/ui/progress";
 import { Upload, FileText, Download, Zap } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import CompressionChart from "@/components/CompressionChart";
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export default function Compress() {
   const algorithms = [
     {
@@ -160,7 +160,7 @@ export default function Compress() {
     }, 200);
 
     try {
-      const response = await fetch("/api/file/process", {
+      const response = await fetch(`${backendUrl}/api/file/process`, {
         method: "POST",
         body: formData,
       });

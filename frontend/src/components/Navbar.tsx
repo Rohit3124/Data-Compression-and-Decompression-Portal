@@ -13,6 +13,7 @@ import { LogOut, Menu, X, Zap } from "lucide-react";
 import { useContext, useState } from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export function Navbar() {
   const { currentUser, setCurrentUser } = useContext(currentUserContext);
@@ -25,7 +26,7 @@ export function Navbar() {
   ];
   const handleSignout = async () => {
     try {
-      const response = await fetch("/api/user/signout", {
+      const response = await fetch(`${backendUrl}/api/user/signout`, {
         method: "POST",
         credentials: "include",
       });

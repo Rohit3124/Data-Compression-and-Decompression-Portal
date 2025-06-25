@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { currentUserContext } from "../context/userContext";
 import dataCompressionImage from "@/assets/dataCompressImg.webp";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 interface SignInFormInputs {
   email: string;
   password: string;
@@ -39,7 +40,7 @@ const SignIn: React.FC = () => {
 
   const onSubmit = async (data: SignInFormInputs) => {
     try {
-      const res = await fetch("/api/auth/signin", {
+      const res = await fetch(`${backendUrl}/api/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

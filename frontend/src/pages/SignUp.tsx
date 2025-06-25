@@ -9,7 +9,7 @@ import { currentUserContext } from "../context/userContext";
 import { Button } from "flowbite-react/components/Button";
 import { Spinner } from "flowbite-react/components/Spinner";
 import dataCompressionImage from "@/assets/dataCompressImg.webp";
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 interface SignUpFormInputs {
   username: string;
   email: string;
@@ -50,7 +50,7 @@ const SignUp: React.FC = () => {
 
   const onSubmit = async (data: SignUpFormInputs) => {
     try {
-      const res = await fetch("/api/user/signup", {
+      const res = await fetch(`${backendUrl}/api/user/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
