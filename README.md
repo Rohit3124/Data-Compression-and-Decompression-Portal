@@ -78,50 +78,50 @@ Make sure the following are installed:
 ### Installation Steps
 
 **1. Clone the Repository**
--git clone https://github.com/Rohit3124/-Data-Compression-and-Decompression-Portal.git
--cd Data-Compression-and-Decompression-Portal
-
+<pre><code class="language-bash">git clone https://github.com/Rohit3124/-Data-Compression-and-Decompression-Portal.git
+cd Data-Compression-and-Decompression-Portal </code></pre>
 **2. Install Dependencie**
--cd backend
--npm install
--cd ../frontend
--npm install
+<pre><code class="language-bash">cd backend
+npm install
+cd ../frontend
+npm install </code></pre>
 
 **3. Setup Environment Variables**
 -Create a .env file in the root directory and add the following -environment variables:
--PORT=3000
--MONGODB_URL=<your_mongodb_connection_string>
--JWT_SECRET_KEY=<your_secret_key>
+<pre><code class="language-ini">PORT=3000
+MONGODB_URL=&lt;your_mongodb_connection_string&gt;
+JWT_SECRET_KEY=&lt;your_secret_key&gt; </code></pre>
 
 **4. Run the Frontend**
 -From the root directory try running
--cd frontend
--npm run dev
+<pre><code class="language-bash">cd frontend
+npm run dev </code></pre>
 
 **5. Run the Backend**
 -From the root directory try running
--cd backend
--nodemon index.js
+<pre><code class="language-bash">cd backend
+nodemon index.js </code></pre>
 
 -The server should start and display:
--Connected to MongoDB...
--Listening on port 3000...
+<pre><code class="language-bash">Connected to MongoDB...
+Listening on port 3000... </code></pre>
 
 **Project Structure**
--|--routes/
--| |--user.route.js
--| |--auth.route.js
--| |--test.route.js
--| |--question.route.js
--| |--result.route.js
--|--index.js
--|--package.json
--|--.env
+<pre><code class="language-lua">|-- routes/
+| |-- user.route.js
+| |-- auth.route.js
+| |-- test.route.js
+| |-- question.route.js
+| |-- result.route.js
+|-- index.js
+|-- package.json
+|-- .env </code></pre>
 
 **Basic API Endpoints**
--POST /api/user/signup -Register a new user
--POST /api/auth/signin -Login user
--POST /api/file/process -To compress/decompress file
+
+- POST /api/user/signup -Register a new user.
+- POST /api/auth/signin -Login user.
+- POST /api/file/process -To compress/decompress file.
 
 **Notes**
 
