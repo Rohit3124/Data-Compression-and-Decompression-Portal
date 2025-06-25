@@ -19,7 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Navbar } from "@/components/Navbar";
-import dataCompressionImage from "@/assets/dataCompressImg.webp"; // Adjust the path as necessary
+import dataCompressionImage from "@/assets/dataCompressImg.webp";
 import { useNavigate } from "react-router-dom";
 export default function Home() {
   const navigate = useNavigate();

@@ -15,7 +15,7 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
 
 export function Navbar() {
-  const { currentUser } = useContext(currentUserContext);
+  const { currentUser, setCurrentUser } = useContext(currentUserContext);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const pathname = location.pathname;
@@ -23,6 +23,21 @@ export function Navbar() {
     { name: "Home", href: "/" },
     { name: "Compress", href: "/compress" },
   ];
+  const handleSignout = async () => {
+    try {
+      const response = await fetch("/api/user/signout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Failed to sign out");
+
+      setCurrentUser(null);
+    } catch (err) {
+      console.error(err);
+      alert("Error signing out. Please try again.");
+    }
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -75,7 +90,10 @@ export function Navbar() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600">
+                <DropdownMenuItem
+                  className="cursor-pointer text-red-600 focus:text-red-600"
+                  onClick={handleSignout}
+                >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign out
                 </DropdownMenuItem>

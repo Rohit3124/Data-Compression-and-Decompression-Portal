@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { currentUserContext } from "../context/userContext";
-
+import dataCompressionImage from "@/assets/dataCompressImg.webp";
 interface SignInFormInputs {
   email: string;
   password: string;
@@ -62,8 +62,9 @@ const SignIn: React.FC = () => {
       <div className="flex p-3 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-20">
         <div className="hidden md:block flex-1">
           <img
-            src="https://cdni.iconscout.com/illustration/premium/thumb/student-giving-online-exam-illustration-download-in-svg-png-gif-file-formats--test-question-paper-male-teacher-working-man-learning-pack-school-education-illustrations-2283970.png?f=webp"
-            alt="Student giving online exam"
+            src={dataCompressionImage}
+            alt=""
+            className="border rounded-lg h-80 w-96"
           />
         </div>
         <div className="flex-1">
